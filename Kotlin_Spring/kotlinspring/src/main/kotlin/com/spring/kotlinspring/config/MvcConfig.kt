@@ -14,7 +14,6 @@ class MvcConfig: WebMvcConfigurer {
                         HttpMethod.PUT.toString(),
                         HttpMethod.PATCH.toString(),
                         HttpMethod.DELETE.toString()
-        );
-
+                )
     }
 }

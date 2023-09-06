@@ -16,7 +16,24 @@ const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(value);
   }
 
-  const onLogin = async (event: React.FormEvent) => {
+  const onLogin = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    const result = await fetch("/api/auth/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      })
+    });
+    console.log(result);
+    const data = await result.json();
+    console.log(data);
+  }
+
+  const onSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
     await fetch("/api/auth/signup", {
       method: "POST",
@@ -27,12 +44,12 @@ const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         email: email,
         password: password,
       })
-    })
+    });
   }
 
   return (
       <div>
-        <form onSubmit={onLogin}>
+        <form onSubmit={onSignUp}>
           <div>
             <label htmlFor="FormEmailInput">Email</label>
             <input id="FormEmailInput"
@@ -51,7 +68,7 @@ const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                    onChange={onPasswordChange}
                    required/>
           </div>
-          <button type="submit">Sign In</button>
+          <button type="button" onClick={onLogin}>Sign In</button>
           <button type="submit">Sign Up</button>
         </form>
       </div>

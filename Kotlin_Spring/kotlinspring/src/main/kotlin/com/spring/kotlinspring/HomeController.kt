@@ -2,18 +2,13 @@ package com.spring.kotlinspring
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
-import org.springframework.ui.set
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @EnableAutoConfiguration(exclude = [DataSourceAutoConfiguration::class])
 class HomeController {
 
+    private var MemberRepository = MemberRepository();
     @GetMapping("/api/hello")
     fun helloWorld(): String {
         return "Hello spring!"
@@ -21,7 +16,13 @@ class HomeController {
 
     @PostMapping("/api/auth/signup")
     fun SignUp(@RequestBody Member: MemberEntity): MemberEntity {
-        println(Member.email)
+        MemberRepository.SignUp(Member.email, Member.password)
         return Member
+    }
+
+    @PostMapping("/api/auth/signin")
+    @ResponseBody
+    fun SignIn(@RequestBody Member: MemberEntity): MemberEntity {
+        return MemberRepository.SignIn(Member.email, Member.password)
     }
 }
