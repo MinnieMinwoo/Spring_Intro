@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.*
 class HomeController {
 
     private var MemberRepository = MemberRepository();
-    @GetMapping("/api/hello")
-    fun helloWorld(): String {
-        return "Hello spring!"
-    }
+    private var TodoRepository = TodoRepository();
 
     @PostMapping("/api/auth/signup")
     fun SignUp(@RequestBody Member: MemberEntity): MemberEntity {
@@ -24,5 +21,12 @@ class HomeController {
     @ResponseBody
     fun SignIn(@RequestBody Member: MemberEntity): MemberEntity {
         return MemberRepository.SignIn(Member.email, Member.password)
+    }
+
+    @PostMapping("/api/todo")
+    @ResponseBody
+    fun UploadTodo(@RequestBody Todo: TodoEntity): TodoEntity {
+        val (email, todo) = Todo
+        return TodoRepository.addTodo(email, todo)
     }
 }

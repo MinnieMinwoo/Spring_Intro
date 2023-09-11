@@ -5,9 +5,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 
 @Entity
-class MemberEntity(
-    var email: String,
-    var password: String,
-    @Id @GeneratedValue var id: Int? = null
+data class TodoEntity (
+    var createdBy: String,
+    var todo: String,
+    @Id @GeneratedValue var id: Int? = null,
 )
-
