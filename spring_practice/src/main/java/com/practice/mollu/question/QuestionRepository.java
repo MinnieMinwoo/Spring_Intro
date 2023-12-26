@@ -1,4 +1,4 @@
-package com.practice.mollu;
+package com.practice.mollu.question;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
