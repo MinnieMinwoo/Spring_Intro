@@ -1,37 +1,29 @@
 package com.practice.mollu;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import com.practice.mollu.answer.Answer;
-import com.practice.mollu.answer.AnswerRepository;
 import com.practice.mollu.question.Question;
-import com.practice.mollu.question.QuestionRepository;
+import com.practice.mollu.question.QuestionService;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class MolluApplicationTests {
 	@Autowired
-	private QuestionRepository questionRepository;
+	private QuestionService questionService;
 
-	@Autowired
-	private AnswerRepository answerRepository;
-
-	@Transactional
 	@Test
 	void testJpa() {
-		Optional<Question> oq = this.questionRepository.findById(2);
-		assertTrue(oq.isPresent());
-		Question q = oq.get();
+		// List<Question> q  = this.questionService.getList();
+		// q.forEach(data -> System.out.println(data.getSubject()));
 
-		List<Answer> answerList = q.getAnswerList();
-		assertEquals(1, answerList.size());
-		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
+		/*
+		for(int i = 1; i <= 300; i++) {
+			String subject = String.format("테스트 데이터 [%03d]", i);
+			String content = "몰루";
+			this.questionService.create(subject, content);
+		}
+		*/
 	}
 
 }
