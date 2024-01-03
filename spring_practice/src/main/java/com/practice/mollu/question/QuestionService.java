@@ -1,5 +1,6 @@
 package com.practice.mollu.question;
 
+import com.practice.mollu.user.SiteUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +37,24 @@ public class QuestionService {
     }
   }
 
-  public void create(String subject, String content) {
+  public void create(String subject, String content, SiteUser user) {
     Question question = new Question();
     question.setSubject(subject);
     question.setContent(content);
     question.setCreateDate(LocalDateTime.now());
+    question.setAuthor(user);
+
     this.questionRepository.save(question);
+  }
+
+  public void modify(Question question, String subject, String content) {
+    question.setSubject(subject);
+    question.setContent(content);
+    question.setModifyDate(LocalDateTime.now());
+    this.questionRepository.save(question);
+  }
+
+  public void delete(Question question) {
+    this.questionRepository.delete(question);
   }
 }

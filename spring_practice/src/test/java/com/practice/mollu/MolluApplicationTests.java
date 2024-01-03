@@ -14,16 +14,12 @@ class MolluApplicationTests {
 
 	@Test
 	void testJpa() {
-		// List<Question> q  = this.questionService.getList();
-		// q.forEach(data -> System.out.println(data.getSubject()));
-
-		/*
 		for(int i = 1; i <= 300; i++) {
 			String subject = String.format("테스트 데이터 [%03d]", i);
 			String content = "몰루";
-			this.questionService.create(subject, content);
+			this.questionService.create(subject, content, null);
 		}
-		*/
+
 	}
 
 }

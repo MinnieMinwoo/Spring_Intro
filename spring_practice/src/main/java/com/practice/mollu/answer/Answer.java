@@ -2,6 +2,7 @@ package com.practice.mollu.answer;
 
 
 import com.practice.mollu.question.Question;
+import com.practice.mollu.user.SiteUser;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,4 +28,9 @@ public class Answer {
 
   @ManyToOne
   private Question question;
+
+  @ManyToOne
+  private SiteUser author;
+
+  private LocalDateTime modifyDate;
 }
