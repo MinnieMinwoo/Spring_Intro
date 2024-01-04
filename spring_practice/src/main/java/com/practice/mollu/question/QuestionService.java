@@ -1,6 +1,13 @@
 package com.practice.mollu.question;
 
+import com.practice.mollu.answer.Answer;
 import com.practice.mollu.user.SiteUser;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.practice.mollu.DataNotFoundException;
 
@@ -20,12 +27,32 @@ import com.practice.mollu.DataNotFoundException;
 public class QuestionService {
   private final QuestionRepository questionRepository;
 
-  public Page<Question> getList(int page) {
+  private Specification<Question> search(String keyword) {
+    return new Specification<Question>() {
+      private static final long serialVersionUID = 1L;
+      @Override
+      public Predicate toPredicate(Root<Question> question, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+        query.distinct(true);
+        Join<Question, SiteUser> questionUser = question.join("author", JoinType.LEFT);
+        Join<Question, Answer> answer = question.join("answerList", JoinType.LEFT);
+        Join<Question, SiteUser> answerUser = answer.join("author", JoinType.LEFT);
+
+        return criteriaBuilder.or(criteriaBuilder.like(question.get("subject"), "%" + keyword + "%"),
+            criteriaBuilder.like(question.get("content"), "%" + keyword + "%"),
+            criteriaBuilder.like(questionUser.get("username"), "%" + keyword + "%"),
+            criteriaBuilder.like(answer.get("content"), "%" + keyword + "%"),
+            criteriaBuilder.like(answerUser.get("username"), "%" + keyword + "%"));
+      }
+    };
+  }
+
+  public Page<Question> getList(int page, String keyword) {
     List<Sort.Order> sorts = new ArrayList<>();
     sorts.add(Sort.Order.desc("createDate"));
 
     Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-    return this.questionRepository.findAll(pageable);
+    Specification<Question> spec = search(keyword);
+    return this.questionRepository.findAll(spec, pageable);
   }
 
   public Question getQuestion(Integer id) {
@@ -56,5 +83,10 @@ public class QuestionService {
 
   public void delete(Question question) {
     this.questionRepository.delete(question);
+  }
+
+  public void vote(Question question, SiteUser siteUser) {
+    question.getVoter().add(siteUser);
+    this.questionRepository.save(question);
   }
 }

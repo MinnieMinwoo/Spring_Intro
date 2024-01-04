@@ -8,8 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +24,7 @@ public class Answer {
   private Integer id;
 
   @Column(columnDefinition = "TEXT")
-  private String Content;
+  private String content;
 
   private LocalDateTime createDate;
 
@@ -33,4 +35,7 @@ public class Answer {
   private SiteUser author;
 
   private LocalDateTime modifyDate;
+
+  @ManyToMany
+  Set<SiteUser> voter;
 }
